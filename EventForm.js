@@ -28,6 +28,10 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 18,
+  },
+  borderTop: {
+    borderColor: "#edeeef",
+    borderTopWidth: 0.5
   }
 })
 
@@ -48,6 +52,25 @@ class EventForm extends Component {
     })
   }
 
+  handleDatePress = () => {
+    this.setState({
+      showDatePicker: true
+    })
+  }
+
+  handleDatePicked = (date) => {
+    this.setState({
+      date
+    })
+    this.handleDatePickerHide();
+  }
+
+  handleDatePickerHide = () => {
+    this.setState({
+      showDatePicker: false
+    })
+  }
+
   render() {
     return (
       <View style={{
@@ -60,9 +83,22 @@ class EventForm extends Component {
             spellCheck={false}
             value={this.state.title}
             onChangeText={this.handleChangeTitle}
-          >
-          </TextInput>
-          
+          />
+          <TextInput 
+            style={[styles.text, styles.borderTop]}         //combines styles  - overrides right to left but merge it.
+            placeholder="Event date"
+            spellCheck={false}
+            value={formatDateTime(this.state.date.toString())}
+            editable={!this.state.showDatePicker}
+            onFocus={this.handleDatePress}
+          />
+          <DateTimePicker 
+            isVisible={this.state.showDatePicker}
+            mode="datetime"
+            onConfirm={this.handleDatePicked}
+            onCancel={this.handleDatePickerHide}
+          />
+
         </View>
         <TouchableHighlight
           onPress={this.handleAddPress}
